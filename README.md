@@ -1,4 +1,1 @@
 # POVGLOBE
-# POVGLOBE
-# ProyectoTrituradoraDeBotellas
-# ProyectoTrituradoraDeBotellas
