@@ -25,6 +25,7 @@ int Led = 5;
 int Sensor = 14;
 
 long TiempoVuelta = 0;
+long MenorTiempo = -1;
 long TiempoInicial = 0;
 long TiempoFinal = 0;
 boolean CalculadoTiempo = false;
@@ -54,28 +55,28 @@ void Conectar() {
 }
 
 void RecibirMQTT(String &topic, String &payload) {
-//  if (payload == "Arcoiris") {
-//    Serial.println("Arcoiris");
-//    rainbow(10);
-//  }
-//  if (payload == "Rojo") {
-//    Serial.println("Rojo");
-//    colorWipe(strip.Color(255,   0,   0), 50); // Red
-//  }
-//  if (payload == "Blanco") {
-//    Serial.println("Blanco");
-//    colorWipe(strip.Color(255,   255,   255), 50); // white
-//
-//  }
-//  if (payload == "Azul") {
-//    Serial.println("Azul");
-//    colorWipe(strip.Color(  0,   0, 255), 50); // Blue
-//
-//  }
-//  if (payload == "Verde") {
-//    Serial.println("Verde");
-//    colorWipe(strip.Color(  0, 255,   0), 50); // Green
-//  }
+  //  if (payload == "Arcoiris") {
+  //    Serial.println("Arcoiris");
+  //    rainbow(10);
+  //  }
+  //  if (payload == "Rojo") {
+  //    Serial.println("Rojo");
+  //    colorWipe(strip.Color(255,   0,   0), 50); // Red
+  //  }
+  //  if (payload == "Blanco") {
+  //    Serial.println("Blanco");
+  //    colorWipe(strip.Color(255,   255,   255), 50); // white
+  //
+  //  }
+  //  if (payload == "Azul") {
+  //    Serial.println("Azul");
+  //    colorWipe(strip.Color(  0,   0, 255), 50); // Blue
+  //
+  //  }
+  //  if (payload == "Verde") {
+  //    Serial.println("Verde");
+  //    colorWipe(strip.Color(  0, 255,   0), 50); // Green
+  //  }
 }
 
 void setup() {
@@ -117,7 +118,13 @@ void loop() {
   if (!client.connected()) {
     Conectar();
   }
-
+  if (millis() > lastMillis + 500) {
+    if (MenorTiempo == -1 || MenorTiempo > TiempoVuelta) {
+      MenorTiempo = TiempoVuelta;
+    }
+    String Mensaje = "" + MenorTiempo;
+    client.publish("/TiempoVuelta", Mensaje);
+  }
 }
 
 //
