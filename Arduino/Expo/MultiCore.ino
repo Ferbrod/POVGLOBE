@@ -1,4 +1,8 @@
+boolean InicioVuelta = false;
+int Sector = 0;
+
 void MultiCore( void * pvParameters ) {
+  IniciarNeoPixel();
   while (1) {
     //    ActualizarTiempo();
     //    Serial.print("TiempoVuelta:");
@@ -8,23 +12,22 @@ void MultiCore( void * pvParameters ) {
     //    Serial.print(" TiempoFinal:");
     //    Serial.println(TiempoFinal);
     //    delay(100);
-    CambiarColor(strip.Color(255,   0,   0));
+    if (InicioVuelta) {
+      InicioVuelta = false;
+      Sector = 0;
+    }
+    CambiarColor(255, 0, 0);
     delay(1000);
-    CambiarColor(strip.Color(0,   255,   0));
+    CambiarColor(0, 255, 0);
     delay(1000);
   }
 }
 
-void CambiarColor(uint32_t color) {
-  for (int i = 0; i < strip.numPixels(); i++) {
-    strip.setPixelColor(i, color);
-    strip.show();
-  }
-}
 
 void ActualizarTiempo() {
   if (CalculadoTiempo) {
     CalculadoTiempo = false;
+    InicioVuelta = true;
     TiempoVuelta = TiempoFinal - TiempoInicial;
     TiempoInicial = TiempoFinal;
   }

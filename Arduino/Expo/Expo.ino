@@ -1,4 +1,4 @@
- #ifdef ARDUINO_ARCH_ESP32
+#ifdef ARDUINO_ARCH_ESP32
 #include <WiFi.h>
 #include <WiFiMulti.h>
 WiFiMulti wifiMulti;
@@ -9,7 +9,7 @@ ESP8266WiFiMulti wifiMulti;
 #endif
 
 #include <MQTT.h>
-#include <Adafruit_NeoPixel.h>
+
 
 const char ssid1[] = "Expo";
 const char pass1[] = "123456789";
@@ -30,15 +30,11 @@ long TiempoInicial = 0;
 long TiempoFinal = 0;
 boolean CalculadoTiempo = false;
 
-#define LED_PIN  13
-#define LED_COUNT 25
-
 void IRAM_ATTR FuncionTiempo() {
   TiempoFinal = micros();
   CalculadoTiempo = true;
 }
 
-Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 void Conectar() {
   Serial.print("Conectando a Wifi...");
@@ -59,28 +55,28 @@ void Conectar() {
 }
 
 void RecibirMQTT(String &topic, String &payload) {
-  if (payload == "Arcoiris") {
-    Serial.println("Arcoiris");
-    rainbow(10);
-  }
-  if (payload == "Rojo") {
-    Serial.println("Rojo");
-    colorWipe(strip.Color(255,   0,   0), 50); // Red
-  }
-  if (payload == "Blanco") {
-    Serial.println("Blanco");
-    colorWipe(strip.Color(255,   255,   255), 50); // white
-
-  }
-  if (payload == "Azul") {
-    Serial.println("Azul");
-    colorWipe(strip.Color(  0,   0, 255), 50); // Blue
-
-  }
-  if (payload == "Verde") {
-    Serial.println("Verde");
-    colorWipe(strip.Color(  0, 255,   0), 50); // Green
-  }
+//  if (payload == "Arcoiris") {
+//    Serial.println("Arcoiris");
+//    rainbow(10);
+//  }
+//  if (payload == "Rojo") {
+//    Serial.println("Rojo");
+//    colorWipe(strip.Color(255,   0,   0), 50); // Red
+//  }
+//  if (payload == "Blanco") {
+//    Serial.println("Blanco");
+//    colorWipe(strip.Color(255,   255,   255), 50); // white
+//
+//  }
+//  if (payload == "Azul") {
+//    Serial.println("Azul");
+//    colorWipe(strip.Color(  0,   0, 255), 50); // Blue
+//
+//  }
+//  if (payload == "Verde") {
+//    Serial.println("Verde");
+//    colorWipe(strip.Color(  0, 255,   0), 50); // Green
+//  }
 }
 
 void setup() {
@@ -113,10 +109,6 @@ void setup() {
   client.onMessage(RecibirMQTT);
 
   Conectar();
-
-  strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
-  strip.show();            // Turn OFF all pixels ASAP
-  strip.setBrightness(50); // Set BRIGHTNESS to about 1/5 (max = 255)
 }
 
 void loop() {
@@ -129,21 +121,22 @@ void loop() {
 
 }
 
-void colorWipe(uint32_t color, int wait) {
-  for (int i = 0; i < strip.numPixels(); i++) { // For each pixel in strip...
-    strip.setPixelColor(i, color);         //  Set pixel's color (in RAM)
-    strip.show();                          //  Update strip to match
-    delay(wait);                           //  Pause for a moment
-  }
-}
-
-void rainbow(int wait) {
-  for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
-    for (int i = 0; i < strip.numPixels(); i++) { // For each pixel in strip...
-      int pixelHue = firstPixelHue + (i * 65536L / strip.numPixels());
-      strip.setPixelColor(i, strip.gamma32(strip.ColorHSV(pixelHue)));
-    }
-    strip.show(); // Update strip with new contents
-    delay(wait);  // Pause for a moment
-  }
-}
+//
+//void colorWipe(uint32_t color, int wait) {
+//  for (int i = 0; i < strip.numPixels(); i++) { // For each pixel in strip...
+//    strip.setPixelColor(i, color);         //  Set pixel's color (in RAM)
+//    strip.show();                          //  Update strip to match
+//    delay(wait);                           //  Pause for a moment
+//  }
+//}
+//
+//void rainbow(int wait) {
+//  for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
+//    for (int i = 0; i < strip.numPixels(); i++) { // For each pixel in strip...
+//      int pixelHue = firstPixelHue + (i * 65536L / strip.numPixels());
+//      strip.setPixelColor(i, strip.gamma32(strip.ColorHSV(pixelHue)));
+//    }
+//    strip.show(); // Update strip with new contents
+//    delay(wait);  // Pause for a moment
+//  }
+//}
