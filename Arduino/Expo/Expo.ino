@@ -1,4 +1,4 @@
-#ifdef ARDUINO_ARCH_ESP32
+ #ifdef ARDUINO_ARCH_ESP32
 #include <WiFi.h>
 #include <WiFiMulti.h>
 WiFiMulti wifiMulti;
@@ -15,16 +15,28 @@ const char ssid1[] = "Expo";
 const char pass1[] = "123456789";
 const char ssid2[] = "ALSW2";
 const char pass2[] = "7210-3607";
+const char ssid3[] = "ALSW";
+const char pass3[] = "25264897";
 
 WiFiClient net;
 MQTTClient client;
 
 unsigned long lastMillis = 0;
 int Led = 5;
+int Sensor = 14;
+
+long TiempoVuelta = 0;
+long TiempoInicial = 0;
+long TiempoFinal = 0;
+boolean CalculadoTiempo = false;
 
 #define LED_PIN  13
 #define LED_COUNT 25
 
+void IRAM_ATTR FuncionTiempo() {
+  TiempoFinal = micros();
+  CalculadoTiempo = true;
+}
 
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -75,11 +87,27 @@ void setup() {
   Serial.begin(115200);
   pinMode(Led, OUTPUT);
   digitalWrite(Led, 1);
+
+  attachInterrupt(Sensor, FuncionTiempo, FALLING);
+  //Activando codig a cargarse en procesador 0
+  //Procesador 1 Exclusico para Wifi
+  //Procesador 0 Actualizar pantalla y Botones
+  xTaskCreatePinnedToCore(
+    MultiCore,   /* Nombre de la funcion */
+    "MultiCore", /* Nombre del proceso  */
+    10000,      /* Tamano de palabra */
+    NULL,       /* parametros de entrada */
+    0,          /* Prioridas del proceso */
+    NULL,       /* Manejo del proceso  */
+    0);  /* Procesador a poner la operacion */
+  delay(100);
+
   Serial.println("Iniciando Wifi");
   WiFi.mode(WIFI_STA);//Cambiar modo del Wi-Fi
   delay(100);
   wifiMulti.addAP(ssid1, pass1);
   wifiMulti.addAP(ssid2, pass2);
+  wifiMulti.addAP(ssid3, pass3);
 
   client.begin("broker.shiftr.io", net);
   client.onMessage(RecibirMQTT);
@@ -110,21 +138,9 @@ void colorWipe(uint32_t color, int wait) {
 }
 
 void rainbow(int wait) {
-  // Hue of first pixel runs 5 complete loops through the color wheel.
-  // Color wheel has a range of 65536 but it's OK if we roll over, so
-  // just count from 0 to 5*65536. Adding 256 to firstPixelHue each time
-  // means we'll make 5*65536/256 = 1280 passes through this outer loop:
   for (long firstPixelHue = 0; firstPixelHue < 5 * 65536; firstPixelHue += 256) {
     for (int i = 0; i < strip.numPixels(); i++) { // For each pixel in strip...
-      // Offset pixel hue by an amount to make one full revolution of the
-      // color wheel (range of 65536) along the length of the strip
-      // (strip.numPixels() steps):
       int pixelHue = firstPixelHue + (i * 65536L / strip.numPixels());
-      // strip.ColorHSV() can take 1 or 3 arguments: a hue (0 to 65535) or
-      // optionally add saturation and value (brightness) (each 0 to 255).
-      // Here we're using just the single-argument hue variant. The result
-      // is passed through strip.gamma32() to provide 'truer' colors
-      // before assigning to each pixel:
       strip.setPixelColor(i, strip.gamma32(strip.ColorHSV(pixelHue)));
     }
     strip.show(); // Update strip with new contents
