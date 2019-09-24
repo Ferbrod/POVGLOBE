@@ -7,7 +7,7 @@ int SectorD[2] = {1, 2};
 void MultiCore( void * pvParameters ) {
   IniciarNeoPixel();
   while (1) {
-    //    ActualizarTiempo();
+    ActualizarTiempo();
     //    Serial.print("TiempoVuelta:");
     //    Serial.print(TiempoVuelta);
     //    Serial.print(" TiempoInicial:");
