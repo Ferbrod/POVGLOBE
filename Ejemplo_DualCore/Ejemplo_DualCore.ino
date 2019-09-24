@@ -9,7 +9,7 @@ long TiempoInicial = 0;
 long TiempoFinal = 0;
 boolean CalculadoTiempo = false;
 
-int Sensor = 14;
+int Sensor = 16;
 const char ssid1[] = "Expo";
 const char pass1[] = "123456789";
 const char ssid2[] = "ALSW2";
