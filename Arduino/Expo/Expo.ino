@@ -10,7 +10,6 @@ ESP8266WiFiMulti wifiMulti;
 
 #include <MQTT.h>
 
-
 const char ssid1[] = "Expo";
 const char pass1[] = "123456789";
 const char ssid2[] = "ALSW2";

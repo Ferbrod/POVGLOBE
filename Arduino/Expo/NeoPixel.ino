@@ -44,7 +44,7 @@ void CambiarColorAreglo(int V) {
         strip.setPixelColor(i, strip.Color(0, 255, 0));
       }
       break;
-    case 3://Azul
+    case 4://Azul
       for (int i = 0; i < strip.numPixels(); i++) {
         strip.setPixelColor(i, strip.Color(0, 0, 255));
       }

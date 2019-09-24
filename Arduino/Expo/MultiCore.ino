@@ -32,6 +32,6 @@ void ActualizarTiempo() {
     InicioVuelta = true;
     TiempoVuelta = TiempoFinal - TiempoInicial;
     TiempoInicial = TiempoFinal;
-    TiempoSector = TiempoVuelta / CantidadSector
+    TiempoSector = TiempoVuelta / CantidadSector;
   }
 }
