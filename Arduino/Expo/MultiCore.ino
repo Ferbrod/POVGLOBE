@@ -1,5 +1,8 @@
 boolean InicioVuelta = false;
+int CantidadSector = 2;
+int TiempoSector = 0;
 int Sector = 0;
+int SectorD[2] = {1, 2};
 
 void MultiCore( void * pvParameters ) {
   IniciarNeoPixel();
@@ -16,10 +19,9 @@ void MultiCore( void * pvParameters ) {
       InicioVuelta = false;
       Sector = 0;
     }
-    CambiarColor(255, 0, 0);
-    delay(1000);
-    CambiarColor(0, 255, 0);
-    delay(1000);
+    CambiarColorAreglo(SectorD[Sector]);
+    Sector = Sector < CantidadSector ? Sector + 1 : Sector;
+    delayMicroseconds(TiempoSector);
   }
 }
 
@@ -30,6 +32,6 @@ void ActualizarTiempo() {
     InicioVuelta = true;
     TiempoVuelta = TiempoFinal - TiempoInicial;
     TiempoInicial = TiempoFinal;
+    TiempoSector = TiempoVuelta / CantidadSector
   }
-
 }

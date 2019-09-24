@@ -20,3 +20,35 @@ void CambiarColor(int R, int G, int B) {
   }
   strip.show();
 }
+
+
+void CambiarColorAreglo(int V) {
+  switch (V) {
+    case 0://Negro
+      for (int i = 0; i < strip.numPixels(); i++) {
+        strip.setPixelColor(i, strip.Color(0, 0, 0));
+      }
+      break;
+    case 1://Blanco
+      for (int i = 0; i < strip.numPixels(); i++) {
+        strip.setPixelColor(i, strip.Color(255, 255, 255));
+      }
+      break;
+    case 2://Rojo
+      for (int i = 0; i < strip.numPixels(); i++) {
+        strip.setPixelColor(i, strip.Color(255, 0, 0));
+      }
+      break;
+    case 3://Azul
+      for (int i = 0; i < strip.numPixels(); i++) {
+        strip.setPixelColor(i, strip.Color(0, 255, 0));
+      }
+      break;
+    case 3://Azul
+      for (int i = 0; i < strip.numPixels(); i++) {
+        strip.setPixelColor(i, strip.Color(0, 0, 255));
+      }
+      break;
+  }
+  strip.show();
+}
