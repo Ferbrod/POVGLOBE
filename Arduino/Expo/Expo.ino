@@ -22,7 +22,7 @@ MQTTClient client;
 
 unsigned long lastMillis = 0;
 int Led = 5;
-int Sensor = 14;
+int Sensor = 16;
 
 long TiempoVuelta = 0;
 long MenorTiempo = -1;
@@ -34,7 +34,6 @@ void IRAM_ATTR FuncionTiempo() {
   TiempoFinal = micros();
   CalculadoTiempo = true;
 }
-
 
 void Conectar() {
   Serial.print("Conectando a Wifi...");
@@ -123,6 +122,8 @@ void loop() {
       MenorTiempo = TiempoVuelta;
     }
     String Mensaje = "" + MenorTiempo;
+    Serial.println(Mensaje);
+    lastMillis = millis();
     client.publish("/TiempoVuelta", Mensaje);
   }
 }
