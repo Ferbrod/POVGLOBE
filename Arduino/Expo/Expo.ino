@@ -82,6 +82,7 @@ void setup() {
   Serial.begin(115200);
   pinMode(Led, OUTPUT);
   digitalWrite(Led, 1);
+  pinMode(Sensor, INPUT);
 
   attachInterrupt(Sensor, FuncionTiempo, FALLING);
   //Activando codig a cargarse en procesador 0
@@ -117,11 +118,13 @@ void loop() {
   if (!client.connected()) {
     Conectar();
   }
+
   if (millis() > lastMillis + 500) {
-    if (MenorTiempo == -1 || MenorTiempo > TiempoVuelta) {
+    if (( MenorTiempo < 0 || MenorTiempo > TiempoVuelta ) && TiempoVuelta != 0) {
       MenorTiempo = TiempoVuelta;
     }
-    String Mensaje = "" + MenorTiempo;
+    String Mensaje = String(MenorTiempo);
+    Serial.print("Dato: ");
     Serial.println(Mensaje);
     lastMillis = millis();
     client.publish("/TiempoVuelta", Mensaje);
